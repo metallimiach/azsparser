@@ -1,0 +1,19 @@
+{
+  "name": "azsparser",
+  "version": "1.0.0",
+  "description": "AZS promotions info parser",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "metallimiach",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "cheerio": "^1.0.0-rc.2",
+    "cheerio-tableparser":"^1.0.1",
+    "express": "^4.15.4",
+    "mongojs": "^2.4.1",
+    "request": "^2.81.0"
+  }
+}
