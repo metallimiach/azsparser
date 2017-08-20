@@ -20,7 +20,7 @@ router.get('/', function (req, res, next) {
     request({
         uri: url,
         method: 'GET',
-        encoding: null                                      // encoding in binery
+        encoding: null                                   // encoding in binery
     }, function (error, response, body) {
         html = iconv.decode(new Buffer(body), 'utf8');   // encoding in utf8
 
@@ -30,14 +30,15 @@ router.get('/', function (req, res, next) {
         };
         res.json(promotions);
         promotions = [];
+        tempArray = [];
     });
 });
 
 function mainContentParser(html) {
     var $ = cheerio.load(html, { ignoreWhitespace: true });
     var tempTable = "<table id = 'data'>";
-    var rows = "";
-    // Extract data
+    
+    // Extract and convert data to table
     $('div .saleBody')
         .children('table')
         .first()
@@ -45,7 +46,7 @@ function mainContentParser(html) {
         .children('tr')
         .next()
         .each(function (i, el) {
-            rows = rows + "<tr>";
+            var rows = "<tr>";
             $(this).children('td')
                 .each(function (j, el) {
                     var td = $(this).text();
@@ -63,16 +64,33 @@ function mainContentParser(html) {
     }
     tempTable = tempTable + "</table>";
 
+    // Extract data from table
     var table = cheerio.load(tempTable);
     cheerioTableparser(table);
     var data = table("#data").parsetable(false, false, true);
 
-    console.log(data);
-
-    promotions.push(data);
-
+    for (var k = 0; k < data.length; k++) {
+        for (var t = 0; t < data[0].length; t++) {
+            var discont = data[k][0];
+            var fuel = data[k][1];
+            var till = data[k][2];
+            var discription = data[k][3];
+            var azs = data[k][4];
+        }
+        discont = discont.replace(new RegExp("%="), "% =");
+        discription = discription.replace(new RegExp("\n", 'g'), "");
+        if (azs != undefined) {
+            azs = azs.replace(new RegExp("Адреса сети АЗС"), "");
+            var metadata = {
+                discont: discont,
+                fuel: fuel,
+                till: till,
+                discription: discription,
+                azs: azs
+            }
+            promotions.push(metadata);
+        }
+    }
     return promotions;
 }
-
-
 module.exports = router;
