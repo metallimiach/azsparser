@@ -69,6 +69,8 @@ function mainContentParser(html) {
 
     console.log(data);
 
+    promotions.push(data);
+
     return promotions;
 }
 
