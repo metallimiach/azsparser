@@ -78,7 +78,8 @@ function mainContentParser(html) {
             var azs = data[k][4];
         }
         discont = discont.replace(new RegExp("%="), "% =");
-        discription = discription.replace(new RegExp("\n", 'g'), "");
+        discription = discription.replace(new RegExp("\n", 'g'), " ");
+        discription = discription.replace(new RegExp("  ", 'g'), "");
         if (azs != undefined) {
             azs = azs.replace(new RegExp("Адреса сети АЗС"), "");
             var metadata = {
